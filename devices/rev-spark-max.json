@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0",
+  "id": "rev-spark-max",
+  "name": "SPARK MAX",
+  "manufacturer": "REV Robotics",
+  "partNumber": "REV-11-2158",
+  "category": "motor-controller",
+  "ports": [
+    {
+      "id": "power-in",
+      "name": "Power Input",
+      "type": "power",
+      "direction": "input",
+      "voltage": { "min": 5.5, "max": 24 },
+      "wireGauge": { "min": 12, "max": 12 },
+      "connector": "wire"
+    },
+    {
+      "id": "motor-out",
+      "name": "Motor Output",
+      "type": "motor",
+      "direction": "output",
+      "wireGauge": { "min": 12, "max": 12 },
+      "connector": "wire"
+    },
+    {
+      "id": "encoder",
+      "name": "Encoder Port",
+      "type": "sensor",
+      "direction": "input",
+      "connector": "jst-ph-6",
+      "note": "Receives hall-effect encoder data from the NEO integrated encoder. Port type 'sensor' used per design decision in phase-1-handoff.md — this type may need to be added to the schema's port type enum. Direction is input from the SPARK MAX's perspective (it receives the sensor signal)."
+    },
+    {
+      "id": "can-1",
+      "name": "CAN 1",
+      "type": "can",
+      "direction": "bidirectional",
+      "connector": "jst-ph-4"
+    },
+    {
+      "id": "can-2",
+      "name": "CAN 2",
+      "type": "can",
+      "direction": "bidirectional",
+      "connector": "jst-ph-4"
+    },
+    {
+      "id": "data",
+      "name": "Data Port",
+      "type": "data",
+      "direction": "bidirectional",
+      "connector": "jst-ph-6",
+      "note": "Top expansion connector. Pin count discrepancy across sources (6-pin vs 10-pin) — verify against REV documentation before finalizing."
+    }
+  ]
+}

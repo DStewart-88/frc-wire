@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0",
+  "id": "rev-neo-v1-1",
+  "name": "NEO Brushless Motor V1.1",
+  "manufacturer": "REV Robotics",
+  "partNumber": "REV-21-1650",
+  "category": "motor",
+  "ports": [
+    {
+      "id": "motor-in",
+      "name": "Motor Input (Phase Wires)",
+      "type": "motor",
+      "direction": "input",
+      "wireGauge": { "min": 12, "max": 12 },
+      "connector": "wire",
+      "note": "Three hardwired phase leads (red, black, white), 12AWG. Gauge confirmed by SPARK MAX documentation; verify against NEO V1.1 spec sheet."
+    },
+    {
+      "id": "encoder-out",
+      "name": "Hall-Effect Encoder Output",
+      "type": "sensor",
+      "direction": "output",
+      "connector": "jst-ph-6",
+      "note": "Integrated hall-effect encoder. Port type 'sensor' used per design decision in phase-1-handoff.md — this type may need to be added to the schema's port type enum. Connects to SPARK MAX encoder port."
+    }
+  ]
+}

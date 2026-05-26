@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0",
+  "id": "can-terminator",
+  "name": "CAN Terminating Resistor",
+  "manufacturer": "Generic",
+  "partNumber": "N/A",
+  "category": "termination",
+  "note": "Generic device file for a 120-ohm CAN terminating resistor. Specific product, manufacturer, and connector type depend on what the team sources.",
+  "ports": [
+    {
+      "id": "can",
+      "name": "CAN",
+      "type": "can",
+      "direction": "bidirectional",
+      "connector": null,
+      "note": "Connector type depends on specific terminator product — verify before use."
+    }
+  ]
+}

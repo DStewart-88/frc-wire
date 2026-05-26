@@ -1,0 +1,115 @@
+{
+  "schemaVersion": "1.0",
+  "id": "ni-roborio-2",
+  "name": "RoboRIO 2",
+  "manufacturer": "National Instruments",
+  "partNumber": "500-2251-850",
+  "category": "robot-controller",
+  "note": "Part number 500-2251-850 needs verification against NI catalog.",
+  "properties": {
+    "canTermination": {
+      "type": "boolean",
+      "default": false,
+      "label": "Internal CAN Termination Enabled"
+    }
+  },
+  "ports": [
+    {
+      "id": "power-in",
+      "name": "Power Input",
+      "type": "power",
+      "direction": "input",
+      "voltage": { "min": 6, "max": 16 },
+      "wireGauge": { "min": 18, "max": 22 },
+      "connector": null
+    },
+    {
+      "id": "can-1",
+      "name": "CAN 1",
+      "type": "can",
+      "direction": "bidirectional",
+      "connector": "jst-ph-4"
+    },
+    {
+      "id": "can-2",
+      "name": "CAN 2",
+      "type": "can",
+      "direction": "bidirectional",
+      "connector": "jst-ph-4"
+    },
+    {
+      "id": "ethernet",
+      "name": "Ethernet",
+      "type": "ethernet",
+      "direction": "bidirectional",
+      "connector": "rj45"
+    },
+    {
+      "id": "usb-a-0",
+      "name": "USB-A 0",
+      "type": "usb-a",
+      "direction": "output",
+      "connector": "usb-a"
+    },
+    {
+      "id": "usb-a-1",
+      "name": "USB-A 1",
+      "type": "usb-a",
+      "direction": "output",
+      "connector": "usb-a"
+    },
+    {
+      "id": "usb-b",
+      "name": "USB-B",
+      "type": "usb-b",
+      "direction": "bidirectional",
+      "connector": "usb-b",
+      "note": "Likely programming only — verify if used during robot operation."
+    },
+    {
+      "id": "mxp",
+      "name": "MXP Expansion Port",
+      "type": "mxp",
+      "direction": "bidirectional",
+      "connector": "mxp"
+    }
+  ],
+  "portTemplates": [
+    {
+      "id": "pwm-{n}",
+      "name": "PWM {n}",
+      "type": "pwm",
+      "direction": "output",
+      "connector": "pwm-header",
+      "count": 10,
+      "indexStart": 0
+    },
+    {
+      "id": "dio-{n}",
+      "name": "DIO {n}",
+      "type": "dio",
+      "direction": "bidirectional",
+      "connector": null,
+      "count": 10,
+      "indexStart": 0
+    },
+    {
+      "id": "analog-{n}",
+      "name": "Analog In {n}",
+      "type": "analog-in",
+      "direction": "input",
+      "connector": null,
+      "count": 4,
+      "indexStart": 0
+    },
+    {
+      "id": "relay-{n}",
+      "name": "Relay {n}",
+      "type": "relay",
+      "direction": "output",
+      "connector": null,
+      "count": 4,
+      "indexStart": 0
+    }
+  ]
+}

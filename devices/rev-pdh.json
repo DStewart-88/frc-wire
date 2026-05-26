@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "1.0",
+  "id": "rev-pdh",
+  "name": "Power Distribution Hub",
+  "manufacturer": "REV Robotics",
+  "partNumber": "REV-11-1850",
+  "category": "power-distribution",
+  "properties": {
+    "canTermination": {
+      "type": "boolean",
+      "default": false,
+      "label": "Internal CAN Termination Enabled"
+    }
+  },
+  "ports": [
+    {
+      "id": "power-in",
+      "name": "Main Power Input",
+      "type": "power",
+      "direction": "input",
+      "voltage": { "nominal": 12 },
+      "wireGauge": { "min": 4, "max": 18 },
+      "connector": null,
+      "note": "Bare terminal — team attaches wire directly. Accepts 4-18 AWG stranded bare wire. FRC rules require 6AWG minimum on this connection; constraint lives in rules engine."
+    },
+    {
+      "id": "can-1",
+      "name": "CAN 1",
+      "type": "can",
+      "direction": "bidirectional",
+      "connector": "wago-lever"
+    },
+    {
+      "id": "can-2",
+      "name": "CAN 2",
+      "type": "can",
+      "direction": "bidirectional",
+      "connector": "wago-lever"
+    },
+    {
+      "id": "lc-1",
+      "name": "Low Current Channel 1",
+      "type": "power",
+      "direction": "output",
+      "voltage": { "min": 6, "max": 14 },
+      "current": { "max": 15 },
+      "wireGauge": { "min": 14, "max": 26 },
+      "connector": "wago-lever",
+      "switchable": false
+    },
+    {
+      "id": "lc-2",
+      "name": "Low Current Channel 2",
+      "type": "power",
+      "direction": "output",
+      "voltage": { "min": 6, "max": 14 },
+      "current": { "max": 15 },
+      "wireGauge": { "min": 14, "max": 26 },
+      "connector": "wago-lever",
+      "switchable": false
+    },
+    {
+      "id": "lc-3",
+      "name": "Low Current Channel 3",
+      "type": "power",
+      "direction": "output",
+      "voltage": { "min": 6, "max": 14 },
+      "current": { "max": 15 },
+      "wireGauge": { "min": 14, "max": 26 },
+      "connector": "wago-lever",
+      "switchable": false
+    },
+    {
+      "id": "lc-switchable",
+      "name": "Low Current Channel (Switchable)",
+      "type": "power",
+      "direction": "output",
+      "voltage": { "min": 6, "max": 14 },
+      "current": { "max": 15 },
+      "wireGauge": { "min": 14, "max": 26 },
+      "connector": "wago-lever",
+      "switchable": true
+    }
+  ],
+  "portTemplates": [
+    {
+      "id": "hc-{n}",
+      "name": "High Current Channel {n}",
+      "type": "power",
+      "direction": "output",
+      "voltage": { "min": 6, "max": 14 },
+      "current": { "max": 40 },
+      "wireGauge": { "min": 8, "max": 24 },
+      "connector": "wago-lever",
+      "switchable": false,
+      "count": 20,
+      "indexStart": 0,
+      "note": "Accepts 8-24 AWG bare solid/stranded; 10-24 AWG with wire ferrule. Use ferrule for fine-stranded wire."
+    }
+  ]
+}

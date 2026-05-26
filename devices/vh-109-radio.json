@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "1.0",
+  "id": "vh-109-radio",
+  "name": "VH-109 FRC Radio",
+  "manufacturer": "Vivid-Hosting",
+  "partNumber": "VH-109",
+  "category": "networking",
+  "properties": {
+    "aux1PoeEnabled": {
+      "type": "boolean",
+      "default": false,
+      "label": "AUX1 PoE Output Enabled"
+    },
+    "aux2PoeEnabled": {
+      "type": "boolean",
+      "default": false,
+      "label": "AUX2 PoE Output Enabled"
+    }
+  },
+  "ports": [
+    {
+      "id": "power-in",
+      "name": "Power Input (12V)",
+      "type": "power",
+      "direction": "input",
+      "voltage": { "min": 4.5, "max": 19 },
+      "connector": null
+    },
+    {
+      "id": "rio-eth",
+      "name": "RIO Ethernet",
+      "type": "ethernet",
+      "direction": "bidirectional",
+      "connector": "rj45",
+      "note": "10/100 Mbps. This port can also receive passive PoE (4.5-19V) as an alternative power input to the Weidmuller terminal — power is accepted on the PoE pins of the RJ45."
+    },
+    {
+      "id": "aux1-eth",
+      "name": "AUX1 Ethernet",
+      "type": "ethernet",
+      "direction": "bidirectional",
+      "connector": "rj45"
+    },
+    {
+      "id": "aux1-poe-out",
+      "name": "AUX1 PoE Power Output",
+      "type": "power",
+      "direction": "output",
+      "voltage": { "min": 4.5, "max": 19 },
+      "connector": "rj45",
+      "note": "Active only when the aux1PoeEnabled property is true (DIP switch on device). Shares the AUX1 RJ45 physical jack with aux1-eth — power is delivered on the PoE pins of the same connector. Output voltage is unregulated passthrough of the radio's input voltage."
+    },
+    {
+      "id": "aux2-eth",
+      "name": "AUX2 Ethernet",
+      "type": "ethernet",
+      "direction": "bidirectional",
+      "connector": "rj45"
+    },
+    {
+      "id": "aux2-poe-out",
+      "name": "AUX2 PoE Power Output",
+      "type": "power",
+      "direction": "output",
+      "voltage": { "min": 4.5, "max": 19 },
+      "connector": "rj45",
+      "note": "Active only when the aux2PoeEnabled property is true (DIP switch on device). Shares the AUX2 RJ45 physical jack with aux2-eth — power is delivered on the PoE pins of the same connector. Output voltage is unregulated passthrough of the radio's input voltage."
+    },
+    {
+      "id": "ds-eth",
+      "name": "DS Ethernet",
+      "type": "ethernet",
+      "direction": "bidirectional",
+      "connector": "rj45",
+      "note": "10/100/1000 Mbps (gigabit). No PoE capability on this port."
+    }
+  ]
+}

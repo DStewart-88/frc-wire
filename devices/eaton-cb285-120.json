@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0",
+  "id": "eaton-cb285-120",
+  "name": "120A Main Breaker",
+  "manufacturer": "Eaton Bussmann",
+  "partNumber": "CB285-120",
+  "category": "protection",
+  "ports": [
+    {
+      "id": "power-in",
+      "name": "Battery Side (BATT)",
+      "type": "power",
+      "direction": "input",
+      "voltage": { "min": 10.5, "max": 13.8, "nominal": 12 },
+      "wireGauge": { "min": 2, "max": 8 },
+      "connector": "ring-terminal",
+      "note": "Threaded stud terminal. Physical wire gauge maximum is determined by whichever ring terminal fits on the stud — verify maximum ring terminal size. FRC rules require 6AWG minimum; constraint lives in rules engine."
+    },
+    {
+      "id": "power-out",
+      "name": "Load Side (AUX)",
+      "type": "power",
+      "direction": "output",
+      "voltage": { "min": 10.5, "max": 13.8, "nominal": 12 },
+      "wireGauge": { "min": 2, "max": 8 },
+      "connector": "ring-terminal",
+      "note": "Threaded stud terminal. Physical wire gauge maximum is determined by whichever ring terminal fits on the stud — verify maximum ring terminal size. FRC rules require 6AWG minimum; constraint lives in rules engine."
+    }
+  ]
+}

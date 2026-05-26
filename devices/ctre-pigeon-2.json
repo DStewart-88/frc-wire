@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0",
+  "id": "ctre-pigeon-2",
+  "name": "Pigeon 2.0",
+  "manufacturer": "CTR Electronics",
+  "partNumber": "Pigeon-2",
+  "category": "sensor",
+  "note": "Part number needs verification against CTRE product catalog.",
+  "ports": [
+    {
+      "id": "power-in",
+      "name": "Power Input",
+      "type": "power",
+      "direction": "input",
+      "wireGauge": { "min": 22, "max": 22 },
+      "connector": "wire",
+      "note": "Two hardwired leads (red/black), 22AWG. Voltage range needs verification from CTRE spec sheet."
+    },
+    {
+      "id": "can",
+      "name": "CAN",
+      "type": "can",
+      "direction": "bidirectional",
+      "wireGauge": { "min": 22, "max": 22 },
+      "connector": "wire",
+      "note": "Four hardwired leads, 22AWG, with 3-pin daisy-chain connector pair (one male, one female) for chaining devices. Two yellow wires are CANH and electrically common per the manual; one green is CANL; one black is ground."
+    }
+  ]
+}
