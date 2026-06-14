@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "id": "test-device",
+  "name": "Test Device",
+  "manufacturer": "Test Co",
+  "partNumber": "TD-1",
+  "category": "sensor",
+  "note": "This is a working note for testing warnings.",
+  "ports": [
+    {
+      "id": "power-in",
+      "name": "Power Input",
+      "type": "power",
+      "direction": "input",
+      "voltage": { "min": 6, "max": 16, "nominal": 12 },
+      "wireGauge": { "min": 18, "max": 22 },
+      "connector": "wire"
+    },
+    {
+      "id": "can",
+      "name": "CAN",
+      "type": "can",
+      "direction": "bidirectional",
+      "connector": "jst-ph-4",
+      "note": "Working note on a port."
+    }
+  ]
+}

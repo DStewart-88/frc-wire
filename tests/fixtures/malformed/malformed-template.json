@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "id": "malformed-template-device",
+  "name": "Malformed Template Device",
+  "manufacturer": "Test Co",
+  "partNumber": "MTD-1",
+  "category": "other",
+  "portTemplates": [
+    {
+      "id": "ch-fixed",
+      "name": "Channel",
+      "type": "power",
+      "direction": "output",
+      "connector": null,
+      "count": 3
+    }
+  ]
+}

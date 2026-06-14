@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0",
+  "id": "test-template-device",
+  "name": "Test Template Device",
+  "manufacturer": "Test Co",
+  "partNumber": "TTD-1",
+  "category": "other",
+  "ports": [
+    {
+      "id": "power-in",
+      "name": "Power Input",
+      "type": "power",
+      "direction": "input",
+      "connector": null
+    }
+  ],
+  "portTemplates": [
+    {
+      "id": "ch-{n}",
+      "name": "Channel {n}",
+      "type": "power",
+      "direction": "output",
+      "current": { "max": 10 },
+      "connector": null,
+      "count": 3,
+      "indexStart": 1
+    }
+  ]
+}

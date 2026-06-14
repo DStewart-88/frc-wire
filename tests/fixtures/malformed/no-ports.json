@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "1.0",
+  "id": "no-ports-device",
+  "name": "No Ports Device",
+  "manufacturer": "Test Co",
+  "partNumber": "NPD-1",
+  "category": "other"
+}

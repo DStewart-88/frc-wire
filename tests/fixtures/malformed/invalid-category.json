@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0",
+  "id": "invalid-category-device",
+  "name": "Invalid Category Device",
+  "manufacturer": "Test Co",
+  "partNumber": "ICD-1",
+  "category": "spaceship",
+  "ports": [
+    {
+      "id": "power-in",
+      "name": "Power Input",
+      "type": "power",
+      "direction": "input",
+      "connector": null
+    }
+  ]
+}

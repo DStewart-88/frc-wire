@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1.0",
+  "name": "Missing ID Device",
+  "manufacturer": "Test Co",
+  "partNumber": "MID-1",
+  "category": "other",
+  "ports": [
+    {
+      "id": "power-in",
+      "name": "Power Input",
+      "type": "power",
+      "direction": "input",
+      "connector": null
+    }
+  ]
+}

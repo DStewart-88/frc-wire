@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "id": "duplicate-port-ids-device",
+  "name": "Duplicate Port IDs Device",
+  "manufacturer": "Test Co",
+  "partNumber": "DPID-1",
+  "category": "other",
+  "ports": [
+    {
+      "id": "ch-1",
+      "name": "Channel 1",
+      "type": "power",
+      "direction": "output",
+      "connector": null
+    }
+  ],
+  "portTemplates": [
+    {
+      "id": "ch-{n}",
+      "name": "Channel {n}",
+      "type": "power",
+      "direction": "output",
+      "connector": null,
+      "count": 2,
+      "indexStart": 1
+    }
+  ]
+}

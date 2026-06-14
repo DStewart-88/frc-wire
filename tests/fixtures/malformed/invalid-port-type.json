@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "1.0",
+  "id": "invalid-port-type-device",
+  "name": "Invalid Port Type Device",
+  "manufacturer": "Test Co",
+  "partNumber": "IPTD-1",
+  "category": "other",
+  "ports": [
+    {
+      "id": "weird",
+      "name": "Weird Port",
+      "type": "laser",
+      "direction": "output",
+      "connector": null
+    }
+  ]
+}
