@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Read(//home/doug/**)",
+      "Bash(bash -lc 'command -v node')",
+      "Bash(apt-cache policy *)",
+      "Bash(sudo -n true)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(npm init *)",
+      "Bash(npm install *)",
+      "Bash(npx tsc *)",
+      "Bash(npx vitest *)",
+      "Bash(npx tsx *)",
+      "Bash(npx --yes tsx scripts/check-devices.ts)",
+      "Bash(npm run *)",
+      "Bash(npx eslint *)",
+      "Bash(npx prettier *)",
+      "Bash(npm test *)",
+      "Bash(git add *)",
+      "Bash(cat .prettierrc.json)",
+      "Bash(cat .prettierignore)",
+      "Bash(cat .eslintignore)",
+      "Bash(cat .gitignore)"
+    ]
+  }
+}

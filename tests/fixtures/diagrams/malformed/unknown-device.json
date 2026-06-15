@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.0",
+  "projectName": "Bad Diagram",
+  "teamNumber": 1234,
+  "ruleYear": 2026,
+  "subsystems": [],
+  "instances": [
+    {
+      "id": "thing-1",
+      "deviceId": "does-not-exist",
+      "name": "Mystery Device"
+    }
+  ],
+  "connections": []
+}

@@ -13,6 +13,7 @@
       "direction": "input",
       "voltage": { "min": 10.5, "max": 13.8, "nominal": 12 },
       "wireGauge": { "min": 2, "max": 8 },
+      "current": { "max": 120 },
       "connector": "ring-terminal",
       "note": "Threaded stud terminal. Physical wire gauge maximum is determined by whichever ring terminal fits on the stud — verify maximum ring terminal size. FRC rules require 6AWG minimum; constraint lives in rules engine."
     },
@@ -23,6 +24,7 @@
       "direction": "output",
       "voltage": { "min": 10.5, "max": 13.8, "nominal": 12 },
       "wireGauge": { "min": 2, "max": 8 },
+      "current": { "max": 120 },
       "connector": "ring-terminal",
       "note": "Threaded stud terminal. Physical wire gauge maximum is determined by whichever ring terminal fits on the stud — verify maximum ring terminal size. FRC rules require 6AWG minimum; constraint lives in rules engine."
     }

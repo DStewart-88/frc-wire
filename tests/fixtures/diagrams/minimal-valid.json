@@ -1,0 +1,92 @@
+{
+  "schemaVersion": "1.0",
+  "projectName": "Minimal Valid Robot",
+  "teamNumber": 1234,
+  "ruleYear": 2026,
+  "subsystems": [],
+  "instances": [
+    {
+      "id": "battery-1",
+      "deviceId": "mk-es17-12",
+      "name": "Battery"
+    },
+    {
+      "id": "breaker-1",
+      "deviceId": "eaton-cb285-120",
+      "name": "Main Breaker"
+    },
+    {
+      "id": "pdh-1",
+      "deviceId": "rev-pdh",
+      "name": "PDH",
+      "portBreakers": {
+        "lc-1": 10,
+        "lc-2": 10
+      }
+    },
+    {
+      "id": "roborio-1",
+      "deviceId": "ni-roborio-2",
+      "name": "roboRIO"
+    },
+    {
+      "id": "radio-1",
+      "deviceId": "vh-109-radio",
+      "name": "Radio"
+    },
+    {
+      "id": "sparkmax-1",
+      "deviceId": "rev-spark-max",
+      "name": "Left Drive SPARK MAX"
+    },
+    {
+      "id": "neo-1",
+      "deviceId": "rev-neo-v1-1",
+      "name": "Left Drive NEO"
+    }
+  ],
+  "connections": [
+    {
+      "id": "conn-batt-pos-to-breaker",
+      "from": { "instanceId": "battery-1", "portId": "positive-out" },
+      "to": { "instanceId": "breaker-1", "portId": "power-in" },
+      "wireGauge": 6
+    },
+    {
+      "id": "conn-breaker-to-pdh",
+      "from": { "instanceId": "breaker-1", "portId": "power-out" },
+      "to": { "instanceId": "pdh-1", "portId": "power-in" },
+      "wireGauge": 6
+    },
+    {
+      "id": "conn-batt-neg-to-pdh",
+      "from": { "instanceId": "battery-1", "portId": "negative-out" },
+      "to": { "instanceId": "pdh-1", "portId": "power-in" },
+      "wireGauge": 6
+    },
+    {
+      "id": "conn-pdh-to-roborio",
+      "from": { "instanceId": "pdh-1", "portId": "lc-1" },
+      "to": { "instanceId": "roborio-1", "portId": "power-in" },
+      "wireGauge": 18
+    },
+    {
+      "id": "conn-pdh-to-radio",
+      "from": { "instanceId": "pdh-1", "portId": "lc-2" },
+      "to": { "instanceId": "radio-1", "portId": "power-in" },
+      "wireGauge": 18
+    },
+    {
+      "id": "conn-pdh-to-sparkmax",
+      "from": { "instanceId": "pdh-1", "portId": "hc-0" },
+      "to": { "instanceId": "sparkmax-1", "portId": "power-in" },
+      "wireGauge": 12
+    },
+    {
+      "id": "conn-sparkmax-to-neo",
+      "from": { "instanceId": "sparkmax-1", "portId": "motor-out" },
+      "to": { "instanceId": "neo-1", "portId": "motor-in" },
+      "wireGauge": 12
+    }
+  ]
+}
