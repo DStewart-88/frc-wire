@@ -5,7 +5,11 @@
   "manufacturer": "National Instruments",
   "partNumber": "500-2251-850",
   "category": "robot-controller",
-  "note": "Part number 500-2251-850 needs verification against NI catalog.",
+  "blockLayout": {
+    "width": 10,
+    "height": 16
+  },
+  "note": "Part number 500-2251-850 needs verification against NI catalog. MXP expansion port omitted from layout — can be added in a future device library update.",
   "properties": {
     "canTermination": {
       "type": "boolean",
@@ -21,42 +25,24 @@
       "direction": "input",
       "voltage": { "min": 6, "max": 16 },
       "wireGauge": { "min": 18, "max": 22 },
-      "connector": null
-    },
-    {
-      "id": "can-1",
-      "name": "CAN 1",
-      "type": "can",
-      "direction": "bidirectional",
-      "connector": "jst-ph-4"
-    },
-    {
-      "id": "can-2",
-      "name": "CAN 2",
-      "type": "can",
-      "direction": "bidirectional",
-      "connector": "jst-ph-4"
-    },
-    {
-      "id": "ethernet",
-      "name": "Ethernet",
-      "type": "ethernet",
-      "direction": "bidirectional",
-      "connector": "rj45"
+      "connector": null,
+      "layout": { "side": "top", "order": 0 }
     },
     {
       "id": "usb-a-0",
       "name": "USB-A 0",
       "type": "usb-a",
       "direction": "output",
-      "connector": "usb-a"
+      "connector": "usb-a",
+      "layout": { "side": "top", "order": 3 }
     },
     {
       "id": "usb-a-1",
       "name": "USB-A 1",
       "type": "usb-a",
       "direction": "output",
-      "connector": "usb-a"
+      "connector": "usb-a",
+      "layout": { "side": "top", "order": 4 }
     },
     {
       "id": "usb-b",
@@ -64,14 +50,32 @@
       "type": "usb-b",
       "direction": "bidirectional",
       "connector": "usb-b",
+      "layout": { "side": "top", "order": 5 },
       "note": "Likely programming only — verify if used during robot operation."
     },
     {
-      "id": "mxp",
-      "name": "MXP Expansion Port",
-      "type": "mxp",
+      "id": "ethernet",
+      "name": "Ethernet",
+      "type": "ethernet",
       "direction": "bidirectional",
-      "connector": "mxp"
+      "connector": "rj45",
+      "layout": { "side": "top", "order": 8 }
+    },
+    {
+      "id": "can-1",
+      "name": "CAN 1",
+      "type": "can",
+      "direction": "bidirectional",
+      "connector": "jst-ph-4",
+      "layout": { "side": "left", "order": 0 }
+    },
+    {
+      "id": "can-2",
+      "name": "CAN 2",
+      "type": "can",
+      "direction": "bidirectional",
+      "connector": "jst-ph-4",
+      "layout": { "side": "left", "order": 1 }
     }
   ],
   "portTemplates": [
@@ -82,7 +86,8 @@
       "direction": "output",
       "connector": "pwm-header",
       "count": 10,
-      "indexStart": 0
+      "indexStart": 0,
+      "layout": { "side": "right", "order": 0 }
     },
     {
       "id": "dio-{n}",
@@ -91,16 +96,8 @@
       "direction": "bidirectional",
       "connector": null,
       "count": 10,
-      "indexStart": 0
-    },
-    {
-      "id": "analog-{n}",
-      "name": "Analog In {n}",
-      "type": "analog-in",
-      "direction": "input",
-      "connector": null,
-      "count": 4,
-      "indexStart": 0
+      "indexStart": 0,
+      "layout": { "side": "left", "order": 4 }
     },
     {
       "id": "relay-{n}",
@@ -109,7 +106,18 @@
       "direction": "output",
       "connector": null,
       "count": 4,
-      "indexStart": 0
+      "indexStart": 0,
+      "layout": { "side": "bottom", "order": 0 }
+    },
+    {
+      "id": "analog-{n}",
+      "name": "Analog In {n}",
+      "type": "analog-in",
+      "direction": "input",
+      "connector": null,
+      "count": 4,
+      "indexStart": 0,
+      "layout": { "side": "bottom", "order": 6 }
     }
   ]
 }

@@ -5,6 +5,10 @@
   "manufacturer": "WestCoast Products",
   "partNumber": "WCP-Kraken-X60",
   "category": "motor-controller",
+  "blockLayout": {
+    "width": 5,
+    "height": 5
+  },
   "note": "Categorized as motor-controller despite the integrated motor — this is its primary functional role in the rules engine. Part number needs verification against the WCP catalog. The motor is integrated; there is no separate motor output port.",
   "ports": [
     {
@@ -15,6 +19,7 @@
       "voltage": { "min": 6, "max": 24 },
       "wireGauge": { "min": 10, "max": 10 },
       "connector": "ring-terminal",
+      "layout": { "side": "bottom", "order": 1 },
       "note": "10AWG pre-crimped ring terminals per product documentation. Voltage range 6-24V assumed similar to other motor controllers — verify from WCP/CTR spec sheet."
     },
     {
@@ -24,6 +29,7 @@
       "direction": "bidirectional",
       "wireGauge": { "min": 22, "max": 22 },
       "connector": "ring-terminal",
+      "layout": { "side": "bottom", "order": 3 },
       "note": "22AWG twisted pair. Connector type (ring-terminal) needs verification against hardware documentation — may differ by revision."
     }
   ]

@@ -5,6 +5,10 @@
   "manufacturer": "Generic",
   "partNumber": "N/A",
   "category": "termination",
+  "blockLayout": {
+    "width": 3,
+    "height": 3
+  },
   "note": "Generic device file for a 120-ohm CAN terminating resistor. Specific product, manufacturer, and connector type depend on what the team sources.",
   "ports": [
     {
@@ -13,6 +17,7 @@
       "type": "can",
       "direction": "bidirectional",
       "connector": null,
+      "layout": { "side": "left", "order": 1 },
       "note": "Connector type depends on specific terminator product — verify before use."
     }
   ]

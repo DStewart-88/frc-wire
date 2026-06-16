@@ -3,6 +3,14 @@
  * See docs/device-library-schema.md for the authoritative spec.
  */
 
+export const PORT_LAYOUT_SIDES = ["left", "right", "top", "bottom"] as const;
+export type PortLayoutSide = (typeof PORT_LAYOUT_SIDES)[number];
+
+export interface PortLayout {
+  side: PortLayoutSide;
+  order: number;
+}
+
 export const DEVICE_CATEGORIES = [
   "robot-controller",
   "power-distribution",
@@ -21,11 +29,7 @@ export const DEVICE_CATEGORIES = [
 
 export type DeviceCategory = (typeof DEVICE_CATEGORIES)[number];
 
-/**
- * Port types per docs/device-library-schema.md section 7.2, plus "sensor".
- * "sensor" is used for encoder-style ports per phase-1-handoff.md 6.3 but is
- * not yet listed in the schema doc's enum table — flagged as a doc gap.
- */
+/** Port types per docs/device-library-schema.md section 7.2. */
 export const PORT_TYPES = [
   "power",
   "motor",
@@ -77,6 +81,7 @@ export interface PortBase {
   current?: CurrentSpec;
   connector: string | null;
   switchable?: boolean;
+  layout?: PortLayout;
   note?: string;
 }
 
@@ -103,6 +108,7 @@ export interface DeviceDefinition {
   manufacturer: string;
   partNumber: string;
   category: DeviceCategory;
+  blockLayout?: { width: number; height: number };
   properties?: Record<string, PropertyDefinition>;
   ports?: Port[];
   portTemplates?: PortTemplate[];

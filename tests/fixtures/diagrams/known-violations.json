@@ -20,7 +20,7 @@
       "deviceId": "rev-pdh",
       "name": "PDH",
       "portBreakers": {
-        "lc-2": 10
+        "lc-21": 10
       }
     },
     {
@@ -69,13 +69,13 @@
     },
     {
       "id": "conn-pdh-to-roborio",
-      "from": { "instanceId": "pdh-1", "portId": "lc-switchable" },
+      "from": { "instanceId": "pdh-1", "portId": "lc-23" },
       "to": { "instanceId": "roborio-1", "portId": "power-in" },
       "wireGauge": 18
     },
     {
       "id": "conn-pdh-to-radio",
-      "from": { "instanceId": "pdh-1", "portId": "lc-2" },
+      "from": { "instanceId": "pdh-1", "portId": "lc-21" },
       "to": { "instanceId": "radio-1", "portId": "power-in" },
       "wireGauge": 18
     },

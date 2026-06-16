@@ -5,6 +5,10 @@
   "manufacturer": "MK Battery",
   "partNumber": "ES17-12",
   "category": "battery",
+  "blockLayout": {
+    "width": 6,
+    "height": 4
+  },
   "ports": [
     {
       "id": "positive-out",
@@ -14,6 +18,7 @@
       "voltage": { "min": 10.5, "max": 13.8, "nominal": 12 },
       "wireGauge": { "min": 2, "max": 8 },
       "connector": null,
+      "layout": { "side": "top", "order": 5 },
       "note": "Nut-and-bolt terminal — team attaches ring lugs. Physical gauge limit is whatever ring terminal fits on the bolt. FRC rules require 6AWG minimum on main power runs; that constraint lives in the rules engine."
     },
     {
@@ -24,6 +29,7 @@
       "voltage": { "min": 10.5, "max": 13.8, "nominal": 12 },
       "wireGauge": { "min": 2, "max": 8 },
       "connector": null,
+      "layout": { "side": "top", "order": 0 },
       "note": "Ground return path. Runs directly to PDH negative input — does not pass through the main breaker. Nut-and-bolt terminal, team-attached ring lug. FRC rules require 6AWG minimum."
     }
   ]

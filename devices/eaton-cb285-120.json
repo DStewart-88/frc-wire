@@ -5,6 +5,10 @@
   "manufacturer": "Eaton Bussmann",
   "partNumber": "CB285-120",
   "category": "protection",
+  "blockLayout": {
+    "width": 4,
+    "height": 4
+  },
   "ports": [
     {
       "id": "power-in",
@@ -15,6 +19,7 @@
       "wireGauge": { "min": 2, "max": 8 },
       "current": { "max": 120 },
       "connector": "ring-terminal",
+      "layout": { "side": "bottom", "order": 0 },
       "note": "Threaded stud terminal. Physical wire gauge maximum is determined by whichever ring terminal fits on the stud — verify maximum ring terminal size. FRC rules require 6AWG minimum; constraint lives in rules engine."
     },
     {
@@ -26,6 +31,7 @@
       "wireGauge": { "min": 2, "max": 8 },
       "current": { "max": 120 },
       "connector": "ring-terminal",
+      "layout": { "side": "top", "order": 3 },
       "note": "Threaded stud terminal. Physical wire gauge maximum is determined by whichever ring terminal fits on the stud — verify maximum ring terminal size. FRC rules require 6AWG minimum; constraint lives in rules engine."
     }
   ]

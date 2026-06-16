@@ -13,11 +13,15 @@ export function expandPortTemplates(templates: PortTemplate[]): Port[] {
 
     for (let i = 0; i < count; i++) {
       const index = indexStart + i;
-      expanded.push({
+      const port: Port = {
         ...rest,
         id: id.replaceAll("{n}", String(index)),
         name: name.replaceAll("{n}", String(index)),
-      });
+      };
+      if (rest.layout !== undefined) {
+        port.layout = { ...rest.layout, order: rest.layout.order + i };
+      }
+      expanded.push(port);
     }
   }
 

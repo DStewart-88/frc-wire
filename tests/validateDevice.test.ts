@@ -267,4 +267,149 @@ describe("validateDevice", () => {
       );
     }
   });
+
+  it("accepts a device with valid blockLayout and port layout fields", () => {
+    const result = validateDevice({
+      ...validDevice,
+      blockLayout: { width: 4, height: 8 },
+      ports: [
+        {
+          id: "power-in",
+          name: "Power Input",
+          type: "power",
+          direction: "input",
+          connector: "wire",
+          layout: { side: "bottom", order: 1 },
+        },
+      ],
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects a port layout order that exceeds the block dimension", () => {
+    const result = validateDevice({
+      ...validDevice,
+      blockLayout: { width: 4, height: 8 },
+      ports: [
+        {
+          id: "power-in",
+          name: "Power Input",
+          type: "power",
+          direction: "input",
+          connector: "wire",
+          layout: { side: "bottom", order: 10 },
+        },
+      ],
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({ message: expect.stringContaining("exceeds block dimension") }),
+      );
+    }
+  });
+
+  it("rejects two ports that share an order on the same side", () => {
+    const result = validateDevice({
+      ...validDevice,
+      blockLayout: { width: 4, height: 8 },
+      ports: [
+        {
+          id: "port-a",
+          name: "Port A",
+          type: "power",
+          direction: "input",
+          connector: "wire",
+          layout: { side: "left", order: 2 },
+        },
+        {
+          id: "port-b",
+          name: "Port B",
+          type: "can",
+          direction: "bidirectional",
+          connector: null,
+          layout: { side: "left", order: 2 },
+        },
+      ],
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({ message: expect.stringContaining('share order 2') }),
+      );
+    }
+  });
+
+  it("rejects a port layout declared without a device blockLayout", () => {
+    const result = validateDevice({
+      ...validDevice,
+      ports: [
+        {
+          id: "power-in",
+          name: "Power Input",
+          type: "power",
+          direction: "input",
+          connector: "wire",
+          layout: { side: "bottom", order: 0 },
+        },
+      ],
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          path: "blockLayout",
+          message: expect.stringContaining("blockLayout"),
+        }),
+      );
+    }
+  });
+
+  it("rejects a blockLayout with non-positive dimensions", () => {
+    const result = validateDevice({
+      ...validDevice,
+      blockLayout: { width: 0, height: -1 },
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({ path: "blockLayout.width" }),
+      );
+    }
+  });
+
+  it("catches order collision between an expanded template port and an explicit port on the same side", () => {
+    const result = validateDevice({
+      ...validDevice,
+      blockLayout: { width: 4, height: 8 },
+      ports: [
+        {
+          id: "fixed-port",
+          name: "Fixed Port",
+          type: "can",
+          direction: "bidirectional",
+          connector: null,
+          layout: { side: "right", order: 2 },
+        },
+      ],
+      portTemplates: [
+        {
+          id: "ch-{n}",
+          name: "Channel {n}",
+          type: "power",
+          direction: "output",
+          connector: null,
+          count: 4,
+          indexStart: 0,
+          layout: { side: "right", order: 0 },
+        },
+      ],
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({ message: expect.stringContaining('share order 2') }),
+      );
+    }
+  });
 });

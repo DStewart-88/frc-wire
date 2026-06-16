@@ -5,6 +5,10 @@
   "manufacturer": "REV Robotics",
   "partNumber": "REV-11-1850",
   "category": "power-distribution",
+  "blockLayout": {
+    "width": 8,
+    "height": 24
+  },
   "properties": {
     "canTermination": {
       "type": "boolean",
@@ -21,6 +25,7 @@
       "voltage": { "nominal": 12 },
       "wireGauge": { "min": 4, "max": 18 },
       "connector": null,
+      "layout": { "side": "bottom", "order": 7 },
       "note": "Bare terminal — team attaches wire directly. Accepts 4-18 AWG stranded bare wire. FRC rules require 6AWG minimum on this connection; constraint lives in rules engine."
     },
     {
@@ -28,58 +33,184 @@
       "name": "CAN 1",
       "type": "can",
       "direction": "bidirectional",
-      "connector": "wago-lever"
+      "connector": "wago-lever",
+      "layout": { "side": "bottom", "order": 0 }
     },
     {
       "id": "can-2",
       "name": "CAN 2",
       "type": "can",
       "direction": "bidirectional",
-      "connector": "wago-lever"
+      "connector": "wago-lever",
+      "layout": { "side": "bottom", "order": 1 }
     },
     {
-      "id": "lc-1",
-      "name": "Low Current Channel 1",
+      "id": "hc-9",
+      "name": "High Current Channel 9",
+      "type": "power",
+      "direction": "output",
+      "voltage": { "min": 6, "max": 14 },
+      "current": { "max": 40 },
+      "wireGauge": { "min": 8, "max": 24 },
+      "connector": "wago-lever",
+      "switchable": false,
+      "layout": { "side": "right", "order": 0 }
+    },
+    {
+      "id": "hc-8",
+      "name": "High Current Channel 8",
+      "type": "power",
+      "direction": "output",
+      "voltage": { "min": 6, "max": 14 },
+      "current": { "max": 40 },
+      "wireGauge": { "min": 8, "max": 24 },
+      "connector": "wago-lever",
+      "switchable": false,
+      "layout": { "side": "right", "order": 1 }
+    },
+    {
+      "id": "hc-7",
+      "name": "High Current Channel 7",
+      "type": "power",
+      "direction": "output",
+      "voltage": { "min": 6, "max": 14 },
+      "current": { "max": 40 },
+      "wireGauge": { "min": 8, "max": 24 },
+      "connector": "wago-lever",
+      "switchable": false,
+      "layout": { "side": "right", "order": 2 }
+    },
+    {
+      "id": "hc-6",
+      "name": "High Current Channel 6",
+      "type": "power",
+      "direction": "output",
+      "voltage": { "min": 6, "max": 14 },
+      "current": { "max": 40 },
+      "wireGauge": { "min": 8, "max": 24 },
+      "connector": "wago-lever",
+      "switchable": false,
+      "layout": { "side": "right", "order": 3 }
+    },
+    {
+      "id": "hc-5",
+      "name": "High Current Channel 5",
+      "type": "power",
+      "direction": "output",
+      "voltage": { "min": 6, "max": 14 },
+      "current": { "max": 40 },
+      "wireGauge": { "min": 8, "max": 24 },
+      "connector": "wago-lever",
+      "switchable": false,
+      "layout": { "side": "right", "order": 4 }
+    },
+    {
+      "id": "hc-4",
+      "name": "High Current Channel 4",
+      "type": "power",
+      "direction": "output",
+      "voltage": { "min": 6, "max": 14 },
+      "current": { "max": 40 },
+      "wireGauge": { "min": 8, "max": 24 },
+      "connector": "wago-lever",
+      "switchable": false,
+      "layout": { "side": "right", "order": 5 }
+    },
+    {
+      "id": "hc-3",
+      "name": "High Current Channel 3",
+      "type": "power",
+      "direction": "output",
+      "voltage": { "min": 6, "max": 14 },
+      "current": { "max": 40 },
+      "wireGauge": { "min": 8, "max": 24 },
+      "connector": "wago-lever",
+      "switchable": false,
+      "layout": { "side": "right", "order": 6 }
+    },
+    {
+      "id": "hc-2",
+      "name": "High Current Channel 2",
+      "type": "power",
+      "direction": "output",
+      "voltage": { "min": 6, "max": 14 },
+      "current": { "max": 40 },
+      "wireGauge": { "min": 8, "max": 24 },
+      "connector": "wago-lever",
+      "switchable": false,
+      "layout": { "side": "right", "order": 7 }
+    },
+    {
+      "id": "hc-1",
+      "name": "High Current Channel 1",
+      "type": "power",
+      "direction": "output",
+      "voltage": { "min": 6, "max": 14 },
+      "current": { "max": 40 },
+      "wireGauge": { "min": 8, "max": 24 },
+      "connector": "wago-lever",
+      "switchable": false,
+      "layout": { "side": "right", "order": 8 }
+    },
+    {
+      "id": "hc-0",
+      "name": "High Current Channel 0",
+      "type": "power",
+      "direction": "output",
+      "voltage": { "min": 6, "max": 14 },
+      "current": { "max": 40 },
+      "wireGauge": { "min": 8, "max": 24 },
+      "connector": "wago-lever",
+      "switchable": false,
+      "layout": { "side": "right", "order": 9 }
+    },
+    {
+      "id": "lc-20",
+      "name": "Low Current Channel 20",
       "type": "power",
       "direction": "output",
       "voltage": { "min": 6, "max": 14 },
       "current": { "max": 15 },
       "wireGauge": { "min": 14, "max": 26 },
       "connector": "wago-lever",
-      "switchable": false
+      "switchable": false,
+      "layout": { "side": "left", "order": 12 }
     },
     {
-      "id": "lc-2",
-      "name": "Low Current Channel 2",
+      "id": "lc-21",
+      "name": "Low Current Channel 21",
       "type": "power",
       "direction": "output",
       "voltage": { "min": 6, "max": 14 },
       "current": { "max": 15 },
       "wireGauge": { "min": 14, "max": 26 },
       "connector": "wago-lever",
-      "switchable": false
+      "switchable": false,
+      "layout": { "side": "left", "order": 13 }
     },
     {
-      "id": "lc-3",
-      "name": "Low Current Channel 3",
+      "id": "lc-22",
+      "name": "Low Current Channel 22",
       "type": "power",
       "direction": "output",
       "voltage": { "min": 6, "max": 14 },
       "current": { "max": 15 },
       "wireGauge": { "min": 14, "max": 26 },
       "connector": "wago-lever",
-      "switchable": false
+      "switchable": false,
+      "layout": { "side": "left", "order": 14 }
     },
     {
-      "id": "lc-switchable",
-      "name": "Low Current Channel (Switchable)",
+      "id": "lc-23",
+      "name": "Low Current Channel 23 (Switchable)",
       "type": "power",
       "direction": "output",
       "voltage": { "min": 6, "max": 14 },
       "current": { "max": 15 },
       "wireGauge": { "min": 14, "max": 26 },
       "connector": "wago-lever",
-      "switchable": true
+      "switchable": true,
+      "layout": { "side": "left", "order": 15 }
     }
   ],
   "portTemplates": [
@@ -93,8 +224,9 @@
       "wireGauge": { "min": 8, "max": 24 },
       "connector": "wago-lever",
       "switchable": false,
-      "count": 20,
-      "indexStart": 0,
+      "layout": { "side": "left", "order": 0 },
+      "count": 10,
+      "indexStart": 10,
       "note": "Accepts 8-24 AWG bare solid/stranded; 10-24 AWG with wire ferrule. Use ferrule for fine-stranded wire."
     }
   ]

@@ -5,10 +5,86 @@ import {
   type PortTemplate,
 } from "../types/device.js";
 import { expandPortTemplates } from "./expandTemplates.js";
-import { isPlainObject, isString } from "./guards.js";
+import { isInteger, isPlainObject, isString } from "./guards.js";
 import type { ValidationIssue, ValidationResult } from "./types.js";
 import { validatePort, validatePortTemplate } from "./validatePort.js";
 import { validateProperties } from "./validateProperties.js";
+
+function validateBlockLayout(
+  value: unknown,
+  errors: ValidationIssue[],
+): { width: number; height: number } | undefined {
+  if (!isPlainObject(value)) {
+    errors.push({ path: "blockLayout", message: 'Field "blockLayout" must be an object.' });
+    return undefined;
+  }
+
+  let width: number | undefined;
+  let height: number | undefined;
+
+  if (!("width" in value) || !isInteger(value.width) || (value.width as number) < 1) {
+    errors.push({
+      path: "blockLayout.width",
+      message: 'Field "width" must be a positive integer.',
+    });
+  } else {
+    width = value.width as number;
+  }
+
+  if (!("height" in value) || !isInteger(value.height) || (value.height as number) < 1) {
+    errors.push({
+      path: "blockLayout.height",
+      message: 'Field "height" must be a positive integer.',
+    });
+  } else {
+    height = value.height as number;
+  }
+
+  if (width === undefined || height === undefined) return undefined;
+  return { width, height };
+}
+
+function validateLayoutRules(
+  ports: Port[],
+  blockLayout: { width: number; height: number } | undefined,
+  errors: ValidationIssue[],
+): void {
+  const portsWithLayout = ports.filter((p) => p.layout !== undefined);
+  if (portsWithLayout.length === 0) return;
+
+  if (blockLayout === undefined) {
+    errors.push({
+      path: "blockLayout",
+      message: "Device must declare blockLayout when any port declares a layout.",
+    });
+    return;
+  }
+
+  const sideOccupied = new Map<string, string>();
+
+  for (const port of portsWithLayout) {
+    const { side, order } = port.layout!;
+    const bound = side === "left" || side === "right" ? blockLayout.height : blockLayout.width;
+
+    if (order >= bound) {
+      errors.push({
+        path: "ports",
+        message: `Port "${port.id}" layout order ${order} on side "${side}" exceeds block dimension ${bound}.`,
+      });
+    }
+
+    const key = `${side}:${order}`;
+    const existing = sideOccupied.get(key);
+    if (existing !== undefined) {
+      errors.push({
+        path: "ports",
+        message: `Ports "${existing}" and "${port.id}" share order ${order} on the "${side}" side.`,
+      });
+    } else {
+      sideOccupied.set(key, port.id);
+    }
+  }
+}
 
 const REQUIRED_STRING_FIELDS = [
   "schemaVersion",
@@ -62,6 +138,11 @@ export function validateDevice(data: unknown): ValidationResult {
         message: "Device has a non-empty note field — should be empty in production files.",
       });
     }
+  }
+
+  let blockLayout: { width: number; height: number } | undefined;
+  if ("blockLayout" in data) {
+    blockLayout = validateBlockLayout(data.blockLayout, errors);
   }
 
   let properties;
@@ -128,6 +209,8 @@ export function validateDevice(data: unknown): ValidationResult {
     }
   }
 
+  validateLayoutRules(allPorts, blockLayout, errors);
+
   if (errors.length > 0) {
     return { success: false, errors, warnings };
   }
@@ -141,6 +224,7 @@ export function validateDevice(data: unknown): ValidationResult {
     category: data.category as ExpandedDevice["category"],
     ports: allPorts,
   };
+  if (blockLayout !== undefined) device.blockLayout = blockLayout;
   if (properties !== undefined) device.properties = properties;
   if (isString(data.note)) device.note = data.note;
 

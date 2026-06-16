@@ -36,6 +36,7 @@ Three principles guide the schema:
 | `manufacturer` | string | yes | Company that makes the device. |
 | `partNumber` | string | yes | Manufacturer's part number. |
 | `category` | string | yes | Device category. See section 7 for valid values. |
+| `blockLayout` | object | no | Canvas block dimensions in slot units. See section 6.5. |
 | `properties` | object | no | Device-level configurable properties. See section 6. |
 | `ports` | array | yes* | Explicit list of ports. |
 | `portTemplates` | array | yes* | Template-expanded port definitions. See section 5. |
@@ -62,6 +63,7 @@ A port is a logical connection point on a device. Each port represents a place w
 | `current` | object | no | Current limit. See 4.4. |
 | `connector` | string \| null | yes | Factory connector. See section 8. |
 | `switchable` | boolean | no | For power outputs only. Whether the port can be switched on/off in software. |
+| `layout` | object | no | Physical position of the port on the canvas block. See section 6.5. |
 | `note` | string | no | Working note for unresolved details. |
 
 ### 4.2 Voltage Range
@@ -162,6 +164,66 @@ The library file declares that a property exists; the diagram model records the 
 
 ---
 
+## 6.5 Canvas Layout
+
+The `blockLayout` and port `layout` fields describe how a device is drawn on the diagram canvas. Both are optional. When absent, the renderer falls back to a simple auto-sized stacked layout (used for generic escape-hatch device blocks). When present, they let a device block roughly mirror the physical shape of the hardware, so the diagram reads like the real device.
+
+### 6.5.1 The Slot Model
+
+A block is divided into a grid of **slots**. One slot equals one port-width in rendered size, and the slot size in pixels is the same across all devices. This keeps every device on a consistent visual grid: a block declared as 24 slots tall renders taller than one declared as 6 slots tall, but proportionally, not absurdly so.
+
+`blockLayout` declares the total slot count on each axis in the device's **default (unrotated) orientation**:
+
+```json
+"blockLayout": {
+  "width": 8,
+  "height": 24
+}
+```
+
+- `width`: slot count left-to-right
+- `height`: slot count top-to-bottom
+
+A block may be declared **larger** than the minimum needed to fit its ports, to make its rendered proportions match the real hardware's relative size. It may not be declared smaller than its ports require.
+
+### 6.5.2 Port Layout
+
+Each port may declare where it sits on the block:
+
+```json
+"layout": {
+  "side": "left",
+  "order": 3
+}
+```
+
+- `side`: one of `"left"`, `"right"`, `"top"`, `"bottom"` — which edge the port handle appears on, in default orientation.
+- `order`: zero-based slot position along that side. On left/right sides, order counts top-to-bottom. On top/bottom sides, order counts left-to-right.
+
+**Gaps** are created by leaving space between order values. Because each integer step is one slot, ports at order 0 and order 2 have one empty slot between them. Non-contiguous order numbers are the intended way to visually separate port groups (e.g. the gap between a PDH's high-current and low-current channels). A conventional gap of 2–3 slots reads as a clear group break.
+
+### 6.5.3 Layout on Port Templates
+
+A port template may carry a `layout`. The template's `order` is the **starting** slot for the first expanded port; each subsequent expanded port increments order by 1. So a template with `count: 10`, `indexStart: 10`, and `layout: { "side": "left", "order": 0 }` produces ports occupying orders 0–9 on the left side.
+
+When a run of templated ports must appear in reverse physical order (e.g. ascending channel numbers that descend physically down an edge), the template's auto-increment cannot express this — list those ports explicitly instead, assigning each its own order. (The PDH high-current channels are the one current device where this arises.)
+
+### 6.5.4 Rotation
+
+Rotation is **not** a device-file concern. A device's `layout` always describes default orientation. The diagram model records any rotation applied to a specific instance (0°, 90°, 180°, or 270°), and the renderer transforms port positions accordingly — a `left`-side port on a device rotated 90° renders on a different edge. `width` and `height` are likewise swapped by the renderer on 90°/270° rotation. Device files never account for rotation.
+
+### 6.5.5 Validation Rules
+
+The schema validator enforces:
+
+- Port `order` must be ≥ 0.
+- Port `order` must be less than the relevant block dimension (`height` for left/right sides, `width` for top/bottom sides). A port cannot fall outside the block.
+- Two ports on the same `side` may not share an `order` value.
+- If any port declares a `layout`, the device must declare a `blockLayout`.
+- `blockLayout` `width` and `height` must be positive integers.
+
+---
+
 ## 7. Enumerated Values
 
 ### 7.1 Categories
@@ -196,6 +258,7 @@ The library file declares that a property exists; the diagram model records the 
 | `usb-b` | USB-B device port. |
 | `mxp` | MXP expansion port. |
 | `data` | Generic data port (e.g. SPARK MAX expansion). |
+| `sensor` | Sensor signal (e.g. hall-effect encoder output/input between a motor and its controller). |
 
 ### 7.3 Directions
 
@@ -236,7 +299,7 @@ Both devices and ports may have an optional `note` field for working comments ab
 
 ### 10.1 SPARK MAX
 
-A motor controller. Demonstrates the basic shape of a device file with no templates or device-level properties.
+A motor controller. Demonstrates the basic shape of a device file with no templates, plus the layout fields: inputs grouped on the bottom edge, outputs and the motor-related encoder port grouped on the top.
 
 ```json
 {
@@ -246,127 +309,95 @@ A motor controller. Demonstrates the basic shape of a device file with no templa
   "manufacturer": "REV Robotics",
   "partNumber": "REV-11-2158",
   "category": "motor-controller",
+  "blockLayout": { "width": 5, "height": 8 },
   "ports": [
     {
       "id": "power-in",
       "name": "Power Input",
       "type": "power",
       "direction": "input",
-      "voltage": { "min": 6, "max": 16 },
-      "wireGauge": { "min": 10, "max": 16 },
-      "connector": "wire"
+      "voltage": { "min": 5.5, "max": 24 },
+      "wireGauge": { "min": 12, "max": 12 },
+      "connector": "wire",
+      "layout": { "side": "bottom", "order": 1 }
+    },
+    {
+      "id": "can-1",
+      "name": "CAN 1",
+      "type": "can",
+      "direction": "bidirectional",
+      "connector": "jst-ph-4",
+      "layout": { "side": "bottom", "order": 3 }
+    },
+    {
+      "id": "can-2",
+      "name": "CAN 2",
+      "type": "can",
+      "direction": "bidirectional",
+      "connector": "jst-ph-4",
+      "layout": { "side": "bottom", "order": 4 }
     },
     {
       "id": "motor-out",
       "name": "Motor Output",
       "type": "motor",
       "direction": "output",
-      "wireGauge": { "min": 10, "max": 16 },
-      "connector": "wire"
+      "wireGauge": { "min": 12, "max": 12 },
+      "connector": "wire",
+      "layout": { "side": "top", "order": 1 }
     },
     {
-      "id": "can-1",
-      "name": "CAN",
-      "type": "can",
-      "direction": "bidirectional",
-      "connector": "jst-ph-4"
-    },
-    {
-      "id": "can-2",
-      "name": "CAN",
-      "type": "can",
-      "direction": "bidirectional",
-      "connector": "jst-ph-4"
-    },
-    {
-      "id": "expansion",
-      "name": "Data Port",
-      "type": "data",
-      "direction": "bidirectional",
-      "connector": "jst-ph-6"
+      "id": "encoder",
+      "name": "Encoder Port",
+      "type": "sensor",
+      "direction": "input",
+      "connector": "jst-ph-6",
+      "layout": { "side": "top", "order": 3 }
     }
   ]
 }
 ```
 
-### 10.2 Power Distribution Hub
+The `encoder` port is placed with the outputs on the top edge even though its direction is `input` — it physically connects to the attached motor, so co-locating it with `motor-out` mirrors the hardware. Layout grouping reflects physical position, not signal direction.
 
-The PDH. Demonstrates device-level properties (the internal CAN termination switch), a mix of explicit ports and a port template (20 high current channels), and the `switchable` field on power outputs.
+### 10.2 Power Distribution Hub (layout focus)
+
+The full PDH file (`rev-pdh.json`) is the authoritative source. The snippet below shows only how the new layout fields work on a complex device — a wide block with high-current channels descending each vertical edge, low-current channels below them on the left, and CAN plus power on the bottom edge.
+
+The PDH high-current channels illustrate the reverse-order case from section 6.5.3: channels `hc-0` through `hc-9` ascend in number but descend physically down the right edge, so they are listed explicitly (hc-9 at order 0 ... hc-0 at order 9) rather than templated. Channels `hc-10` through `hc-19` descend both in number and position down the left edge, so they use a template.
 
 ```json
 {
-  "schemaVersion": "1.0",
-  "id": "rev-pdh",
-  "name": "Power Distribution Hub",
-  "manufacturer": "REV Robotics",
-  "partNumber": "REV-11-1850",
-  "category": "power-distribution",
-  "properties": {
-    "canTermination": {
-      "type": "boolean",
-      "default": false,
-      "label": "Internal CAN Termination Enabled"
-    }
-  },
+  "blockLayout": { "width": 8, "height": 24 },
   "ports": [
     {
       "id": "power-in",
       "name": "Main Power Input",
       "type": "power",
       "direction": "input",
-      "voltage": { "nominal": 12 },
-      "wireGauge": { "min": 2, "max": 4 },
-      "connector": null
+      "layout": { "side": "bottom", "order": 7 }
     },
     {
       "id": "can-1",
-      "name": "CAN",
       "type": "can",
       "direction": "bidirectional",
-      "connector": "jst-ph-4"
+      "layout": { "side": "bottom", "order": 0 }
     },
     {
-      "id": "can-2",
-      "name": "CAN",
-      "type": "can",
-      "direction": "bidirectional",
-      "connector": "jst-ph-4"
+      "id": "hc-9",
+      "name": "High Current Channel 9",
+      "type": "power",
+      "direction": "output",
+      "current": { "max": 40 },
+      "layout": { "side": "right", "order": 0 }
     },
     {
-      "id": "lc-1",
-      "name": "Low Current Channel 1",
+      "id": "lc-20",
+      "name": "Low Current Channel 20",
       "type": "power",
       "direction": "output",
       "current": { "max": 15 },
-      "connector": null,
-      "switchable": false
-    },
-    {
-      "id": "lc-2",
-      "name": "Low Current Channel 2",
-      "type": "power",
-      "direction": "output",
-      "current": { "max": 15 },
-      "connector": null,
-      "switchable": false
-    },
-    {
-      "id": "lc-3",
-      "name": "Low Current Channel 3",
-      "type": "power",
-      "direction": "output",
-      "current": { "max": 15 },
-      "connector": null,
-      "switchable": false
-    },
-    {
-      "id": "lc-switchable",
-      "name": "Low Current Channel (Switchable)",
-      "type": "power",
-      "direction": "output",
-      "current": { "max": 15 },
-      "connector": null,
-      "switchable": true
+      "layout": { "side": "left", "order": 12 }
     }
   ],
   "portTemplates": [
@@ -375,139 +406,76 @@ The PDH. Demonstrates device-level properties (the internal CAN termination swit
       "name": "High Current Channel {n}",
       "type": "power",
       "direction": "output",
-      "voltage": { "min": 6, "max": 14 },
       "current": { "max": 40 },
-      "wireGauge": { "min": 10, "max": 2 },
-      "connector": "wago-lever",
-      "switchable": false,
-      "count": 20,
-      "indexStart": 0
+      "count": 10,
+      "indexStart": 10,
+      "layout": { "side": "left", "order": 0 }
     }
-  ],
-  "note": "Specific values (wire gauge ranges, low current channel limits, connector names) need verification against REV spec sheet."
+  ]
 }
 ```
 
-### 10.3 RoboRIO 2
+Note the gap on the left edge: the template fills orders 0–9 (hc-10 through hc-19), then `lc-20` begins at order 12, leaving two empty slots as a visible group break.
 
-The robot controller. Demonstrates a device with many port types, multiple templates (PWM, DIO, analog, relay), device-level properties, and a port-level note for an unresolved detail.
+### 10.3 RoboRIO 2 (four-sided layout focus)
+
+The full RoboRIO file (`ni-roborio-2.json`) is authoritative. The RoboRIO is the clearest example of ports distributed across all four edges: power, USB, and ethernet along the top; PWM down the right; CAN and DIO down the left; relay and analog along the bottom. The snippet below shows one port per side plus how templates place a run of ports along an edge.
 
 ```json
 {
-  "schemaVersion": "1.0",
-  "id": "ni-roborio-2",
-  "name": "RoboRIO 2",
-  "manufacturer": "National Instruments",
-  "partNumber": "REV-11-1856",
-  "category": "robot-controller",
-  "properties": {
-    "canTermination": {
-      "type": "boolean",
-      "default": false,
-      "label": "Internal CAN Termination Enabled"
-    }
-  },
+  "blockLayout": { "width": 10, "height": 16 },
   "ports": [
     {
       "id": "power-in",
-      "name": "Power Input",
       "type": "power",
       "direction": "input",
-      "voltage": { "min": 6, "max": 16 },
-      "wireGauge": { "min": 18, "max": 22 },
-      "connector": null
+      "layout": { "side": "top", "order": 0 }
     },
     {
       "id": "can-1",
-      "name": "CAN",
       "type": "can",
       "direction": "bidirectional",
-      "connector": "jst-ph-4"
-    },
-    {
-      "id": "can-2",
-      "name": "CAN",
-      "type": "can",
-      "direction": "bidirectional",
-      "connector": "jst-ph-4"
-    },
-    {
-      "id": "ethernet",
-      "name": "Ethernet",
-      "type": "ethernet",
-      "direction": "bidirectional",
-      "connector": "rj45"
-    },
-    {
-      "id": "usb-a-0",
-      "name": "USB-A 0",
-      "type": "usb-a",
-      "direction": "output",
-      "connector": "usb-a"
-    },
-    {
-      "id": "usb-a-1",
-      "name": "USB-A 1",
-      "type": "usb-a",
-      "direction": "output",
-      "connector": "usb-a"
-    },
-    {
-      "id": "usb-b",
-      "name": "USB-B",
-      "type": "usb-b",
-      "direction": "bidirectional",
-      "connector": "usb-b",
-      "note": "Likely programming only — verify if used during robot operation"
-    },
-    {
-      "id": "mxp",
-      "name": "MXP Expansion Port",
-      "type": "mxp",
-      "direction": "bidirectional",
-      "connector": "mxp"
+      "layout": { "side": "left", "order": 0 }
     }
   ],
   "portTemplates": [
     {
       "id": "pwm-{n}",
-      "name": "PWM {n}",
       "type": "pwm",
       "direction": "output",
-      "connector": "pwm-header",
       "count": 10,
-      "indexStart": 0
+      "indexStart": 0,
+      "layout": { "side": "right", "order": 0 }
     },
     {
       "id": "dio-{n}",
-      "name": "DIO {n}",
       "type": "dio",
       "direction": "bidirectional",
-      "connector": null,
       "count": 10,
-      "indexStart": 0
-    },
-    {
-      "id": "analog-{n}",
-      "name": "Analog In {n}",
-      "type": "analog-in",
-      "direction": "input",
-      "connector": null,
-      "count": 4,
-      "indexStart": 0
+      "indexStart": 0,
+      "layout": { "side": "left", "order": 4 }
     },
     {
       "id": "relay-{n}",
-      "name": "Relay {n}",
       "type": "relay",
       "direction": "output",
-      "connector": null,
       "count": 4,
-      "indexStart": 0
+      "indexStart": 0,
+      "layout": { "side": "bottom", "order": 0 }
+    },
+    {
+      "id": "analog-{n}",
+      "type": "analog-in",
+      "direction": "input",
+      "count": 4,
+      "indexStart": 0,
+      "layout": { "side": "bottom", "order": 6 }
     }
   ]
 }
 ```
+
+On the left edge, CAN occupies orders 0–1 and the DIO template begins at order 4, leaving a gap. On the bottom edge, the relay template fills orders 0–3 and analog begins at order 6, again with a visible break. The MXP center-board expansion port is omitted from the layout — it sits in the middle of the board rather than on an edge, and is a candidate for a future library update.
 
 ---
 
@@ -522,3 +490,5 @@ The following design decisions are reflected in this schema and are worth preser
 - **The 6V floor for unregulated power is a rules engine constant**, not a per-device value. Revisable centrally without touching device files.
 - **Connector metadata describes factory connectors only.** Team-added connectors are diagram-level metadata.
 - **Device-level configurable properties (like CAN termination switches) live in `properties`**, not as ports. The library declares them; the diagram instance records actual values.
+- **Canvas layout is descriptive physical position, not signal logic.** Ports are placed on the block to mirror where they sit on real hardware, even when that conflicts with their electrical direction (e.g. a motor's encoder input sits with the motor output). The slot grid keeps all devices on a consistent visual scale, and block dimensions may exceed port requirements to keep relative device sizes realistic.
+- **Rotation is instance state, not device data.** Device files always describe default orientation; the diagram model records per-instance rotation and the renderer transforms positions. This keeps device files free of presentation state.

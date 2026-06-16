@@ -1,9 +1,12 @@
 import {
   PORT_DIRECTIONS,
+  PORT_LAYOUT_SIDES,
   PORT_TYPES,
   type CurrentSpec,
   type Port,
   type PortBase,
+  type PortLayout,
+  type PortLayoutSide,
   type PortTemplate,
   type VoltageRange,
   type WireGaugeRange,
@@ -95,6 +98,11 @@ function validatePortBase(
     }
   }
 
+  if ("layout" in obj) {
+    const layout = validatePortLayout(obj.layout, `${path}.layout`, errors);
+    if (layout) base.layout = layout;
+  }
+
   if ("note" in obj) {
     if (!isString(obj.note)) {
       errors.push({ path: `${path}.note`, message: 'Field "note" must be a string.' });
@@ -110,6 +118,47 @@ function validatePortBase(
   }
 
   return base;
+}
+
+function validatePortLayout(
+  value: unknown,
+  path: string,
+  errors: ValidationIssue[],
+): PortLayout | undefined {
+  if (!isPlainObject(value)) {
+    errors.push({ path, message: 'Field "layout" must be an object.' });
+    return undefined;
+  }
+
+  let side: PortLayoutSide | undefined;
+  if (!("side" in value)) {
+    errors.push({ path: `${path}.side`, message: 'Missing required field "side".' });
+  } else if (
+    !isString(value.side) ||
+    !(PORT_LAYOUT_SIDES as readonly string[]).includes(value.side)
+  ) {
+    errors.push({
+      path: `${path}.side`,
+      message: `Invalid side "${String(value.side)}". Must be one of: ${PORT_LAYOUT_SIDES.join(", ")}.`,
+    });
+  } else {
+    side = value.side as PortLayoutSide;
+  }
+
+  let order: number | undefined;
+  if (!("order" in value)) {
+    errors.push({ path: `${path}.order`, message: 'Missing required field "order".' });
+  } else if (!isInteger(value.order) || (value.order as number) < 0) {
+    errors.push({
+      path: `${path}.order`,
+      message: 'Field "order" must be a non-negative integer.',
+    });
+  } else {
+    order = value.order as number;
+  }
+
+  if (side === undefined || order === undefined) return undefined;
+  return { side, order };
 }
 
 function validateVoltage(
